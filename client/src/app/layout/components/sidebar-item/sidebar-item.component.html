@@ -1,0 +1,16 @@
+<a
+  class="sidebar-item"
+  [ngClass]="isActivated ? 'active-route' : ''"
+  (click)="handleClick()"
+>
+  <div class="icon-container">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Example home icon"
+      [fontIcon]="sidebarItem.icon!"
+    ></mat-icon>
+  </div>
+  <span>
+    {{ sidebarItem.title }}
+  </span>
+</a>

@@ -1,0 +1,40 @@
+@import "colors";
+
+.calendar-container {
+    max-width: 100%;
+
+    .calendar-controls {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .previous-next,
+        .calendar-view {
+            display: flex;
+
+            .btn {
+                background-color: $accent-color;
+                color: $base-color;
+                padding: 0.8rem;
+                cursor: pointer ;
+
+                &:first-child {
+                    border-radius: 8px 0 0 8px;
+                }
+
+                &:last-child{
+                    border-radius: 0 8px 8px 0;
+                }
+
+                &:hover {
+                    background-color: $accent-color-light;
+                }
+
+                &:active {
+                    background-color: darken($accent-color, 10%);
+                }
+            }
+        }
+    }
+}

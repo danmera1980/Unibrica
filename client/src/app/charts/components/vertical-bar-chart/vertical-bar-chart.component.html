@@ -1,0 +1,21 @@
+<ngx-charts-bar-vertical 
+[results]="data"
+[xAxisLabel]="labels.xAxisLabel"
+[yAxisLabel]="labels.yAxisLabel"
+[legendTitle]="'labels.title'"
+[legend]="true"
+[showXAxisLabel]="true"
+[showYAxisLabel]="true"
+[xAxis]="true"
+[yAxis]="true"
+[gradient]="true"
+[showDataLabel]="false"
+[barPadding]="12"
+[roundEdges]="true"
+[scheme]="colorScheme"
+>
+</ngx-charts-bar-vertical>
+
+<!-- 
+    This is what should be added to the ngx-chart in case we run into problems with responsiveness.
+    (window:resize)="onResize(containerRef.offsetWidth, containerRef.offsetHeight)" -->

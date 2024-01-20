@@ -1,0 +1,53 @@
+<div class="fingerprint-container">
+  <div class="title">
+    <h3>HORARIOS</h3>
+  </div>
+  <div class="timing">
+    <div class="timing-content">
+      <h4>Ingreso:</h4>
+      <span>
+        {{ signInTime }}
+      </span>
+    </div>
+    <div class="timing-content">
+      <h4>Salida:</h4>
+      <span> {{ signOutTime }}</span>
+    </div>
+  </div>
+</div>
+<button
+  mat-fab
+  [color]="fingerprintColor"
+  aria-label="Notification bell"
+  [title]="!signInTime ? 'Fichar Entrada' : 'Fichar Salida'"
+  (click)="onFingerprintClick()"
+>
+  <mat-icon>fingerprint</mat-icon>
+</button>
+<button
+  mat-fab
+  [disabled]="selfImprovementDisabled"
+  aria-label="Notification bell"
+  title="Tomar Descanso"
+  (click)="onBreakClick()"
+>
+  <mat-icon>self_improvement</mat-icon>
+</button>
+<div class="break-container">
+  <div class="title">
+    <h3>BREAKS</h3>
+  </div>
+  <div class="timing">
+    <div id="chronometer">{{ chronometerTime }}</div>
+  </div>
+</div>
+<div class="avatar-container">
+  <button mat-icon-button aria-label="Notification bell">
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <img
+    alt="User Avatar"
+    class="user-avatar"
+    src="https://material.angular.io/assets/img/examples/shiba1.jpg"
+  />
+</div>

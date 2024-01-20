@@ -1,0 +1,14 @@
+<app-table [dataSource]="tableData" [columns]="tableColumns" [clickableColumns]="clickableColumns">
+  <div class="header-container">
+    <app-search-bar [label]="'Buscar empleado'"></app-search-bar>
+    <button
+      mat-icon-button
+      color="primary"
+      aria-label="Download"
+      title="Exportar a Excel"
+      (click)="exportToExcel()"
+    >
+      <mat-icon>cloud_download</mat-icon>
+    </button>
+  </div>
+</app-table>

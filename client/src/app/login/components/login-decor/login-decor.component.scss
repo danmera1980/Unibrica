@@ -1,0 +1,65 @@
+@use 'colors' as c; 
+:host{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 65%;
+    margin: 0;
+    gap: 0.5em;
+    p{
+        color: c.$grey;
+    }
+}
+
+
+
+.unibrica-word{
+    display: flex;
+    h2{
+        margin-bottom: 0.5em;
+        font-weight: 300;
+        opacity: 0;
+        animation: fadeInOut 3s forwards;
+    }
+
+    h2:nth-child(1) {
+        animation-delay: 0.4s;      
+    }
+    h2:nth-child(2) {
+        animation-delay: 0.8s;
+    }
+    h2:nth-child(3) {
+        animation-delay: 1.2s;
+    }
+    h2:nth-child(4) {
+        animation-delay: 1.4s;
+    }
+    h2:nth-child(5) {
+        animation-delay: 2s;
+    }
+    h2:nth-child(6) {
+        animation-delay: 2.4s;
+    }
+    h2:nth-child(7) {
+        animation-delay: 2.8s;
+    }
+    h2:nth-child(8) {
+        animation-delay: 3.2s;
+    }
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}

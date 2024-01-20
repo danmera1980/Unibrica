@@ -1,0 +1,81 @@
+
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+@use 'colors' as c;
+@import 'mixins';
+
+@include mat.core();
+
+
+$client-primary: mat.define-palette(mat.$indigo-palette);
+$client-accent: mat.define-palette(mat.$indigo-palette, A200, A100, A400);
+$client-warn: mat.define-palette(mat.$red-palette);
+
+$client-theme: mat.define-light-theme((
+  color: (
+    primary: $client-primary,
+    accent: $client-accent,
+    warn: $client-warn,
+  ),
+
+));
+
+$client-theme-dark: mat.define-dark-theme((
+  color: (
+    primary: $client-primary,
+    accent: $client-accent,
+    warm: $client-warn
+  )
+));
+
+
+.theme-light {
+  @include mat.all-component-colors($client-theme);
+  color: c.$dark-color;
+  background-color: c.$base-color;
+}
+
+.theme-dark {
+  @include mat.all-component-colors($client-theme-dark);
+  color: c.$base-color;
+  background-color: c.$dark-color;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: 'Montserrat', sans-serif;}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@include custom-components-theme($notifications-theme);
+
+* {
+  /* Scroll Styles */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: c.$accent-color-light;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: c.$accent-color;
+
+    &:hover {
+      background-color: c.$dark-color;
+    }
+  }
+
+  scroll-behavior: smooth;
+}

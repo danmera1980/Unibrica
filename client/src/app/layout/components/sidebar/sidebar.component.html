@@ -1,0 +1,32 @@
+<div class="sidebar-container">
+  <div class="logo-container">
+    <img alt="unibrica logo" class="logo" src="assets/media/alternative-logo.png" />
+  </div>
+
+  <hr class="divider" />
+
+  <div class="sidebar-items-container">
+    <ul class="sidebar-items-list">
+      <li *ngFor="let sidebarItem of sidebarItems">
+        <app-sidebar-item [sidebarItem]="sidebarItem" [activatedRoute]="currentRoute"></app-sidebar-item>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="hamburger" *ngIf="!isMenuOpen" (click)="toggleMenu()">
+  <mat-icon aria-hidden="false" aria-label="Open Menu" fontIcon="menu"></mat-icon>
+</div>
+
+<div class="menu-block" *ngIf="isMenuOpen" [ngClass]="isMenuOpen ? 'menu-open' : 'menu-closed'">
+  <div class="close-btn" (click)="toggleMenu()">
+    <mat-icon aria-hidden="false" aria-label="Close Menu" fontIcon="close"></mat-icon>
+  </div>
+  <div class="sidebar-items-container">
+    <ul class="sidebar-items-list">
+      <li *ngFor="let sidebarItem of sidebarItems">
+        <app-sidebar-item [sidebarItem]="sidebarItem"></app-sidebar-item>
+      </li>
+    </ul>
+  </div>
+</div>

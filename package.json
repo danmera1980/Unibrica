@@ -1,0 +1,22 @@
+{
+  "name": "unibrica_plartform",
+  "version": "1.0.0",
+  "description": "Unibirica Platform",
+  "main": "index.js",
+  "scripts": {
+    "start:client": "cd client && ng serve",
+    "start:server": "cd server && npm run start:dev",
+    "test": "cd client && npm run test:headless && cd.. && cd server && npm test",
+    "test:client": "cd client && npm run test:headless",
+    "test:server": "cd server && npm test",
+    "start:new-terminal": "start powershell -NoExit -Command npm run start:server",
+    "start": "npm run start:new-terminal & npm run start:client"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@angular/cli": "^16.0.3",
+    "jest": "^29.5.0",
+    "lint-staged": "^13.2.2"
+  }
+}

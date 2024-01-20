@@ -1,0 +1,37 @@
+erdiagram Unibrica
+notation=crowsfoot
+
+entity User {
+	id: int key
+	username: varchar
+  password: varchar
+  email: varchar
+}
+entity Type {
+  id: int key
+  name: varchar
+}
+
+entity Permission {
+  id: int key
+  name: varchar
+}
+
+entity Type_Permission {
+  id: int key
+  type_id: int
+  permision_id: int
+  permission: bool
+}
+
+relationship is {
+  User[N] -> Type[1]
+}
+
+relationship has1 {
+  Type[1] -> Type_Permission[N]
+}
+
+relationship has2 {
+  Permission[1] -> Type_Permission[N]
+}

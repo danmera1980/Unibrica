@@ -1,0 +1,48 @@
+@use 'breakpoints' as b;
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.filter-button{
+  width: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.table-container {
+  z-index: 3;
+  position: relative;
+  background-color: white;
+  padding-bottom: 0.2em;
+  app-table {
+    overflow-x: auto;
+  }
+}
+
+.filters {
+  max-height: 0;
+  overflow-y: hidden;
+  transition: max-height 1s ease-in-out;
+  margin-block: 0.3em;
+}
+
+.shown{
+  max-height: calc(56px*4);
+}
+
+@media ( width > b.$mobile-breakpoint) { 
+  .shown{
+    max-height: 112px;
+  }
+}
+
+@media ( width > b.$laptop-breakpoint) { 
+  :host {
+    padding: 2em;
+  }
+  .shown{
+    max-height: 56px;
+  }
+}

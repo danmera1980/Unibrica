@@ -1,0 +1,73 @@
+@import 'colors';
+
+:host {
+  background-color: $base-color;
+  box-shadow: 8px 0px 8px 1px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  gap: 24px;
+  z-index: 2;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+
+  .break-container,
+  .fingerprint-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #536dfe;
+    color: $base-color;
+    height: 80px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    padding: 10px;
+
+    .title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50%;
+    }
+
+    .timing {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 50%;
+
+      .timing-content {
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #chronometer {
+        font-size: 30px;
+      }
+    }
+  }
+
+  .avatar-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .user-avatar {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      transition: filter 0.3s;
+
+      &:hover {
+        filter: brightness(1.2);
+      }
+    }
+  }
+
+}

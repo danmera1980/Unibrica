@@ -1,0 +1,15 @@
+@use 'colors' as c;
+
+:host {
+    display: block;
+    z-index: 2;
+    overflow-x: auto;
+}
+
+.clickable-cell {
+    cursor: pointer;
+}
+
+.clickable-cell:hover{
+    color: c.$accent-color;
+}

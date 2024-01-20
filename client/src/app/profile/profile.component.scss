@@ -1,0 +1,109 @@
+@use 'breakpoints' as b;
+@use 'colors' as c;
+
+
+:host{
+  position: relative;
+  overflow: hidden;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  align-items: center;
+  height: 100%;
+  h2 {
+      align-self: flex-start;
+  }
+
+  form {
+      display: flex;
+      flex-direction: column;
+  }
+}  
+
+mat-form-field {
+  width: 100%;
+  height: 3rem;
+  input{
+  padding-block: 0.5em;
+
+  }
+
+}
+  
+.field{
+  display: flex;
+  justify-content: space-between;
+  h3{
+    padding: 0.4em;
+  }
+}
+
+
+.button-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.user-image{
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+
+  img{
+      width: 200px;
+      height: 200px;
+      text-align: center;
+      vertical-align: center;
+      background-color: rgb(43, 43, 43);
+      color: white;
+      border-radius: 100px;
+      box-shadow: 0px 0px 5px 5px rgba(73, 72, 72, 0.609);
+      max-width: unset;
+      object-fit: cover;
+  }
+  div{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      height: 200px;
+      text-align: center;
+      vertical-align: center;
+      background-color: rgb(172, 170, 170);
+      color: white;
+      border-radius: 100px;
+      box-shadow: 2px 2px 5px 5px rgba(136, 136, 136, 0.609);
+
+      mat-icon{
+          transform: scale(3);
+      }
+
+  }
+}
+
+:host:after {
+  content: '';
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: c.$accent-color-light;
+  border-radius: 0px 0px 100% 99% / 0px 0px 39% 63%;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  top: -40%; /* change value as required */
+  right: -0%; /* change value as required */
+}
+
+@media ( width > b.$tablet-breakpoint) {
+  :host:after {
+    border-radius:
+    0% 100% 28% 72% / 70% 20% 80% 30% ;
+  }
+}

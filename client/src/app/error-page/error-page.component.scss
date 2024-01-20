@@ -1,0 +1,39 @@
+@use 'colors' as c;
+
+
+.error-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, c.$accent-color 0%, #ebebeb 15%, #ebebeb 85%, rgb(213, 213, 213) 98%);
+}
+
+mat-card {
+  width: 400px;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  width: 200px;
+  margin-bottom: 20px;
+  align-self: center;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}

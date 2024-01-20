@@ -1,0 +1,75 @@
+<h1 mat-dialog-title>Upload File</h1>
+<mat-dialog-content [formGroup]="form" #inputForm color="primary">
+  <mat-form-field
+    id="file-type-form-field"
+    appearance="outline"
+    class="file-type-form-field"
+    floatLabel="always"
+  >
+    <mat-label>Clientes</mat-label>
+    <mat-select formControlName="client">
+      <mat-option
+        *ngFor="let client of clients"
+        [value]="client.name"
+        (onSelectionChange)="selectedClientId = client.id"
+      >
+        {{ client.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field
+    id="file-type-form-field"
+    appearance="outline"
+    class="file-type-form-field"
+    floatLabel="always"
+  >
+    <mat-label>Bancos</mat-label>
+    <mat-select formControlName="bank">
+      <mat-option
+        *ngFor="let bank of banks"
+        [value]="bank.name"
+        (onSelectionChange)="selectedBankId = bank.id"
+      >
+        {{ bank.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field
+    id="file-type-form-field"
+    appearance="outline"
+    class="file-type-form-field"
+    floatLabel="always"
+  >
+    <mat-label>Archivo</mat-label>
+    <mat-select formControlName="fileType">
+      <mat-option value="rebajas">Rebajas</mat-option>
+      <mat-option value="deudas" default>Deudas</mat-option>
+      <mat-option value="cobros">Cobros</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="file-form-field">
+    <p *ngIf="filesLabel">{{ filesLabel }}</p>
+    <button mat-button (click)="fileInput.click()">
+      <mat-icon matIconPrefix matTooltip="Choose file(s)..."> attach_file</mat-icon>
+      Upload files
+    </button>
+  </div>
+  <input
+    hidden
+    type="file"
+    [accept]="fileAccept"
+    (change)="onSelectedFiles($event)"
+    #fileInput
+    [multiple]="multipleFilesAccepted"
+  />
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button color="primary" type="button" form="inputForm" (click)="onUploadFiles()">
+    <!-- [disabled]="!files || !form.valid" -->
+    Submit
+  </button>
+  <button mat-stroked-button color="warn" (click)="onCloseClick()">Close</button>
+</mat-dialog-actions>

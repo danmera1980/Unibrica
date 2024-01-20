@@ -1,0 +1,16 @@
+<div class="container">
+    <h2>Sign in</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()" >
+        <mat-form-field appearance="outline" color="primary" id="user-form-field">
+            <mat-label>Ingrese su usuario</mat-label>
+            <input matInput formControlName="username" autocomplete="off" placeholder="Usuario" required aria-label="Usuario">
+        </mat-form-field>
+        <mat-form-field appearance="outline" color="primary" id="password-form-field">
+            <mat-label>Ingrese su contraseña</mat-label>
+            <input matInput formControlName="password" type="password" placeholder="Contraseña" required aria-label="Contraseña">
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="!form.valid"  >
+            Login
+        </button>
+    </form>
+</div>

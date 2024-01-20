@@ -1,0 +1,55 @@
+// Mixin for notifications / snackbar
+$notifications-theme: (
+  default: white,
+  info: blue,
+  success: #00ab00,
+  warning: yellow,
+  error: red,
+);
+
+@mixin notification-theme($notifications-theme) {
+  $info-color: map-get($notifications-theme, info);
+  $success-color: map-get($notifications-theme, success);
+  $warn-color: map-get($notifications-theme, warning);
+  $error-color: map-get($notifications-theme, error);
+  .mat-mdc-snack-bar-container {
+    button{
+        color: white !important;
+    }
+  }
+  .info-notification {
+    &.mat-mdc-snack-bar-container {
+      .mdc-snackbar__surface {
+        background: $info-color;
+      }
+    }
+  }
+
+  .success-notification {
+    &.mat-mdc-snack-bar-container {
+      .mdc-snackbar__surface {
+        background: $success-color;
+      }
+    }
+  }
+
+  .warning-notification {
+    &.mat-mdc-snack-bar-container {
+      .mdc-snackbar__surface {
+        background: $warn-color;
+      }
+    }
+  }
+
+  .error-notification {
+    &.mat-mdc-snack-bar-container {
+      .mdc-snackbar__surface {
+        background: $error-color;
+      }
+    }
+  }
+}
+
+@mixin custom-components-theme($notifications-theme) {
+  @include notification-theme($notifications-theme);
+}

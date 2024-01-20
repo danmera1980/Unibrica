@@ -1,0 +1,23 @@
+@use 'breakpoints' as b;
+@use 'colors' as c;
+
+:host{
+    display:flex;
+    align-items: center;
+    height: 100vh;
+    
+}
+
+app-login-decor {
+    display: none;
+}
+
+@media (min-width: b.$tablet-breakpoint){
+    :host{
+        background: linear-gradient(135deg, c.$accent-color 0%, c.$base-color 15%, c.$base-color 85%, rgb(213, 213, 213) 98%);
+
+    }
+    app-login-decor{
+        display: flex;
+    }
+}
