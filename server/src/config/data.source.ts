@@ -22,7 +22,7 @@ export const DataSourceConfig: DataSourceOptions = {
   migrationsRun: true,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
-  ssl: configService.get('POSTGRESS_SSL'), === "true",
+  ssl: configService.get('POSTGRESS_SSL') === "true",
       extra: {
         ssl:
           configService.get('POSTGRESS_SSL') === "true"
