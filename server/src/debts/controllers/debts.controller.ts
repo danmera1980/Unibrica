@@ -16,7 +16,12 @@ export class DebtsController {
 
   @Post('uploadDebtSheet')
   @UseInterceptors(FileInterceptor('file'))
-  public async uploadDebtSheet(@UploadedFile() file: Express.Multer.File, @Body('userId') userId: string, @Body('clientId') clientId: string, @Body('bankId') bankId: string): Promise<void> {
+  public async uploadDebtSheet(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('userId') userId: string,
+    @Body('clientId') clientId: string,
+    @Body('bankId') bankId: string
+  ): Promise<void> {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }

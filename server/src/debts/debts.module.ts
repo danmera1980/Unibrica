@@ -16,15 +16,10 @@ import { BanksModule } from 'src/banks/banks.module';
 @Module({
   imports: [
     MulterModule.register(multerConfig),
-    TypeOrmModule.forFeature([
-      AccountEntity,
-      DebtorEntity,
-      DebtEntity,
-      DebtSheetsEntity,
-    ]), 
+    TypeOrmModule.forFeature([AccountEntity, DebtorEntity, DebtEntity, DebtSheetsEntity]),
     UsersModule,
     ClientsModule,
-    BanksModule
+    BanksModule,
   ],
   providers: [DebtsService],
   controllers: [DebtsController],

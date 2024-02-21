@@ -8,7 +8,7 @@ import { BankDTO } from '../dto/bank.dto';
 @Injectable()
 export class BanksService {
   constructor(
-    @InjectRepository(BankEntity) private readonly bankRepository: Repository<BankEntity>,
+    @InjectRepository(BankEntity) private readonly bankRepository: Repository<BankEntity>
   ) {}
 
   public async getAllBanks(): Promise<BankEntity[]> {
@@ -33,5 +33,4 @@ export class BanksService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
-
 }

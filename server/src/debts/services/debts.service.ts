@@ -59,6 +59,7 @@ export class DebtsService {
       // Create debt sheet
       await this.debtSheetRepository.save(debtSheet);
 
+      console.log('ACÄ LLEGÖ');
       // Create a promise returning the text: "Debt sheet uploaded successfully, and it is being processed.", then process the debt sheet in the background
       new Promise((resolve) => {
         resolve('Debt sheet uploaded successfully, and it is being processed.');
@@ -74,12 +75,13 @@ export class DebtsService {
   }
 
   public async processDebtSheet(excelData: any, debtSheet: DebtSheetsEntity) {
-    let debtors = [];
-    let accounts = [];
-    let debts = [];
+    const debtors = [];
+    const accounts = [];
+    const debts = [];
 
     for (const row of excelData) {
       // Search/Create debtor
+      console.log('Estoy procesando... ');
       let debtor: DebtorEntity;
       const checkDebtor = await this.debtorRepository.findOne({
         where: { dni: row['DNI'] },
@@ -128,6 +130,8 @@ export class DebtsService {
       // await this.debtRepository.save(debt);
       debts.push(debt);
     }
+
+    console.log('DEBTS: ', debts);
 
     await Promise.all([
       this.debtorRepository.save(debtors),
