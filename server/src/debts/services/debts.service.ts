@@ -141,6 +141,10 @@ export class DebtsService {
 
     return 'Debts have been processed successfully.';
   }
+
+  public async getAllDebts(): Promise<DebtEntity[]> {
+    return await this.debtRepository.find();
+  }
 }
 
 // {

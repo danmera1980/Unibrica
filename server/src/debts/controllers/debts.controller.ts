@@ -5,6 +5,7 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  Get,
 } from '@nestjs/common';
 import { DebtsService } from '../services/debts.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -26,5 +27,10 @@ export class DebtsController {
       throw new BadRequestException('No file uploaded');
     }
     return await this.debtsService.uploadDebtSheet(file, userId, clientId, bankId);
+  }
+
+  @Get('all')
+  public async getAllDebts() {
+    return await this.debtsService.getAllDebts();
   }
 }

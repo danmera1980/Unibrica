@@ -1,1 +1,1 @@
-<app-table [dataSource]="tableData" [columns]="tableColumns" [clickableColumns]="clickableColumns"></app-table>
+<app-table *ngIf="tableData && tableColumns" [dataSource]="tableData" [columns]="tableColumns" [clickableColumns]="clickableColumns"></app-table>
