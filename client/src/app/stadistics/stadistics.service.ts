@@ -6,12 +6,14 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/enviroments/enviroment';
 import { Debtor } from './components/debtors/debtors.interface';
+import { Client } from './components/clients/clients.interfaces';
 
 @Injectable()
 export class StadisticsService {
 
   private DebtsUrl = `${environment.envVar.API_URL}/debts`;
   private DebtorsUrl = `${environment.envVar.API_URL}/debtors`;
+  private ClientsUrl = `${environment.envVar.API_URL}/clients`;
 
   params$!: Observable<Params>;
 
@@ -29,6 +31,10 @@ export class StadisticsService {
 
   getAllDebtors(): Observable<Debtor[]> {
     return this.http.get<any>(`${this.DebtorsUrl}`, { withCredentials: true });
+  }
+
+  getAllClients(): Observable<Client[]> {
+    return this.http.get<any>(`${this.ClientsUrl}/all`, { withCredentials: true });
   }
 
   navigateWithQueryParams(pageInfo: PageEvent, filters: FilterValues, route: string): void {

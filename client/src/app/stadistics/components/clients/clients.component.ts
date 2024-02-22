@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
-import { CLIENT_TABLE_COLUMNS_MOCK } from './clients.interfaces';
+import { Component, ViewChild } from '@angular/core';
+import { CLIENT_TABLE_COLUMNS_MOCK, Client } from './clients.interfaces';
 import { StadisticsService } from '../../stadistics.service';
 import { Subscription } from 'rxjs';
 import { Params } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Debt } from '../debts/debts.interface';
+import { MatTableDataSourceInput } from 'src/app/shared/table/table.component';
 
 @Component({
   selector: 'app-clients',
@@ -10,21 +14,34 @@ import { Params } from '@angular/router';
   styleUrls: ['./clients.component.scss']
 })
 export class ClientsComponent {
-  // tableData = CLIENT_TABLE_COLUMNS_MOCK;
-  // tableColumns = Object.keys(CLIENT_TABLE_COLUMNS_MOCK[0]);
-  // clickableColumns = new Set<string>([this.tableColumns[0]]);
-  // subscriptions: Subscription[] = [];
-  // params!: Params;
+  clients!: Client[]
+  tableData!: MatTableDataSource<MatTableDataSourceInput>;
+  tableColumns: string[] = [];
+  clickableColumns = new Set<string>([this.tableColumns[0]]);
+  subscriptions: Subscription[] = [];
+  params!: Params;
 
-  // constructor (private stadisticsService: StadisticsService) {
-  //   this.subscriptions.push(
-  //     this.stadisticsService.getParams().subscribe(params => {
-  //       this.params = params;
-  //     })
-  //   )
-  // }
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  // ngOnDestroy(): void {
-  //   this.subscriptions.forEach(subscription => subscription.unsubscribe());
-  // }
+  constructor (private statisticsService: StadisticsService) {
+    this.subscriptions.push(
+      this.statisticsService.getParams().subscribe(params => {
+        this.params = params;
+      })
+    )
+
+    this.subscriptions.push(
+      this.statisticsService.getAllClients().subscribe((clients) => {
+        this.clients = clients;
+        this.tableData = new MatTableDataSource<MatTableDataSourceInput>(clients);
+        this.tableColumns = Object.keys(clients[0]);
+        this.clickableColumns = new Set<string>([this.tableColumns[0]]);
+        this.tableData.paginator = this.paginator;
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }

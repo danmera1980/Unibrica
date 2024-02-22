@@ -6,6 +6,7 @@ import { Params } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Debt } from '../debts/debts.interface';
+import { MatTableDataSourceInput } from 'src/app/shared/table/table.component';
 
 @Component({
   selector: 'app-debtors',
@@ -14,7 +15,7 @@ import { Debt } from '../debts/debts.interface';
 })
 export class DebtorsComponent {
   debtors!: Debtor[]
-  tableData!: MatTableDataSource<Debtor | Debt>;
+  tableData!: MatTableDataSource<MatTableDataSourceInput>;
   tableColumns = Object.keys(DEBTOR_TABLE_DATA_MOCK[0]);
   clickableColumns = new Set<string>([this.tableColumns[0]]);
   subscriptions: Subscription[] = [];
@@ -32,7 +33,7 @@ export class DebtorsComponent {
     this.subscriptions.push(
       this.statisticsService.getAllDebtors().subscribe((debtors) => {
         this.debtors = debtors;
-        this.tableData = new MatTableDataSource<Debtor | Debt>(debtors);
+        this.tableData = new MatTableDataSource<MatTableDataSourceInput>(debtors);
         this.tableColumns = Object.keys(debtors[0]);
         this.clickableColumns = new Set<string>([this.tableColumns[0]]);
         this.tableData.paginator = this.paginator;
