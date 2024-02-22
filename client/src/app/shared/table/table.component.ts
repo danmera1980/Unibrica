@@ -34,6 +34,24 @@ export class TableComponent {
   @Input() clickableColumns!:Set<string>;
   @Output() elementClickEmitter = new EventEmitter<TableClickEvent>();
 
+  columnNames: { [key: string]: string } = {
+    createdAt: 'Creado',
+    updatedAt: 'Actualizado',
+    dueDate: 'Vencimiento',
+    id: 'Id',
+    idDebt: 'ID Deuda',
+    amount: 'Monto',
+    firstNames: 'Nombre',
+    lastNames: 'Apellido',
+    dni: 'DNI',
+    name: 'Nombre',
+    clientId: 'ID Cliente'
+  };
+
+  ngOnInit() {
+    console.log('COLUMNS : ', this.columns);
+  }
+
   elementClick (event: TableClickEvent):void {
     if (!this.clickableColumns) return;
     if(this.clickableColumns.has(event.column)) {

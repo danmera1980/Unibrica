@@ -21,3 +21,11 @@ table {
   height: 62vh;
   overflow: auto;
 }
+
+.cell-center {
+  text-align: center; /* Centro para todas las celdas */
+}
+
+.cell-center:first-child {
+  text-align: left; /* Izquierda solo para la primera columna */
+}

@@ -16,7 +16,7 @@ import { MatTableDataSourceInput } from 'src/app/shared/table/table.component';
 export class DebtorsComponent {
   debtors!: Debtor[]
   tableData!: MatTableDataSource<MatTableDataSourceInput>;
-  tableColumns = Object.keys(DEBTOR_TABLE_DATA_MOCK[0]);
+  tableColumns = ['firstNames', 'dni', 'createdAt', 'updatedAt' ];
   clickableColumns = new Set<string>([this.tableColumns[0]]);
   subscriptions: Subscription[] = [];
   params!: Params;
@@ -34,7 +34,7 @@ export class DebtorsComponent {
       this.statisticsService.getAllDebtors().subscribe((debtors) => {
         this.debtors = debtors;
         this.tableData = new MatTableDataSource<MatTableDataSourceInput>(debtors);
-        this.tableColumns = Object.keys(debtors[0]);
+        // this.tableColumns = Object.keys(debtors[0]);
         this.clickableColumns = new Set<string>([this.tableColumns[0]]);
         this.tableData.paginator = this.paginator;
       })

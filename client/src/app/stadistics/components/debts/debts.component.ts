@@ -15,7 +15,7 @@ import { MatTableDataSourceInput } from 'src/app/shared/table/table.component';
 })
 export class DebtsComponent implements OnDestroy {
   tableData!: MatTableDataSource<MatTableDataSourceInput>;
-  tableColumns: string[] = [];
+  tableColumns: string[] = ['idDebt', 'createdAt', 'updatedAt', 'dueDate', 'amount'];
   clickableColumns = new Set<string>();
   subscriptions: Subscription[] = [];
   debts: Debt[] = [];
@@ -34,7 +34,7 @@ export class DebtsComponent implements OnDestroy {
       this.statisticsService.getAllDebts().subscribe((debts) => {
         this.debts = debts;
         this.tableData = new MatTableDataSource<MatTableDataSourceInput>(debts);
-        this.tableColumns = Object.keys(debts[0]);
+        // this.tableColumns = Object.keys(debts[0]);
         this.clickableColumns = new Set<string>([this.tableColumns[0]]);
         this.tableData.paginator = this.paginator;
       })
