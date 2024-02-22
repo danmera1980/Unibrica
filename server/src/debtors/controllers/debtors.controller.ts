@@ -13,7 +13,7 @@ export class DebtorsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<DebtorEntity> {
-    return this.debtorsService.findOne(+id);
+    return this.debtorsService.findOne(id);
   }
 
   @Post()

@@ -5,10 +5,14 @@ import { NavigationExtras, Router, ActivatedRoute, Params } from '@angular/route
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/enviroments/enviroment';
+import { Debtor } from './components/debtors/debtors.interface';
 
 @Injectable()
 export class StadisticsService {
+
   private DebtsUrl = `${environment.envVar.API_URL}/debts`;
+  private DebtorsUrl = `${environment.envVar.API_URL}/debtors`;
+
   params$!: Observable<Params>;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpClient) {
@@ -21,6 +25,10 @@ export class StadisticsService {
 
   getAllDebts(): Observable<any> {
     return this.http.get<any>(`${this.DebtsUrl}/all`, { withCredentials: true });
+  }
+
+  getAllDebtors(): Observable<Debtor[]> {
+    return this.http.get<any>(`${this.DebtorsUrl}`, { withCredentials: true });
   }
 
   navigateWithQueryParams(pageInfo: PageEvent, filters: FilterValues, route: string): void {

@@ -5,6 +5,7 @@ import { Params } from '@angular/router';
 import { StadisticsService } from '../../stadistics.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Debtor } from '../debtors/debtors.interface';
 
 @Component({
   selector: 'app-debts',
@@ -12,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./debts.component.scss'],
 })
 export class DebtsComponent implements OnDestroy {
-  tableData!: MatTableDataSource<Debt>;
+  tableData!: MatTableDataSource<Debt | Debtor>;
   tableColumns: string[] = [];
   clickableColumns = new Set<string>();
   subscriptions: Subscription[] = [];
@@ -31,7 +32,7 @@ export class DebtsComponent implements OnDestroy {
     this.subscriptions.push(
       this.statisticsService.getAllDebts().subscribe((debts) => {
         this.debts = debts;
-        this.tableData = new MatTableDataSource<Debt>(debts);
+        this.tableData = new MatTableDataSource<Debt | Debtor>(debts);
         this.tableColumns = Object.keys(debts[0]);
         this.clickableColumns = new Set<string>([this.tableColumns[0]]);
         this.tableData.paginator = this.paginator;

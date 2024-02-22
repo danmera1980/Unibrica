@@ -1,8 +1,11 @@
 import { StadisticsService } from './../../stadistics.service';
-import { Component } from '@angular/core';
-import { DEBTOR_TABLE_DATA_MOCK } from './debtors.interface';
+import { Component, ViewChild } from '@angular/core';
+import { DEBTOR_TABLE_DATA_MOCK, Debtor } from './debtors.interface';
 import { Subscription } from 'rxjs';
 import { Params } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { Debt } from '../debts/debts.interface';
 
 @Component({
   selector: 'app-debtors',
@@ -10,21 +13,34 @@ import { Params } from '@angular/router';
   styleUrls: ['./debtors.component.scss']
 })
 export class DebtorsComponent {
-  // tableData = DEBTOR_TABLE_DATA_MOCK;
-  // tableColumns = Object.keys(DEBTOR_TABLE_DATA_MOCK[0]);
-  // clickableColumns = new Set<string>([this.tableColumns[0]]);
-  // subscriptions: Subscription[] = [];
-  // params!: Params;
+  debtors!: Debtor[]
+  tableData!: MatTableDataSource<Debtor | Debt>;
+  tableColumns = Object.keys(DEBTOR_TABLE_DATA_MOCK[0]);
+  clickableColumns = new Set<string>([this.tableColumns[0]]);
+  subscriptions: Subscription[] = [];
+  params!: Params;
 
-  // constructor (private stadisticsService: StadisticsService) {
-  //   this.subscriptions.push(
-  //     this.stadisticsService.getParams().subscribe(params => {
-  //       this.params = params;
-  //     })
-  //   )
-  // }
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  // ngOnDestroy(): void {
-  //   this.subscriptions.forEach(subscription => subscription.unsubscribe());
-  // }
+  constructor (private statisticsService: StadisticsService) {
+    this.subscriptions.push(
+      this.statisticsService.getParams().subscribe(params => {
+        this.params = params;
+      })
+    )
+
+    this.subscriptions.push(
+      this.statisticsService.getAllDebtors().subscribe((debtors) => {
+        this.debtors = debtors;
+        this.tableData = new MatTableDataSource<Debtor | Debt>(debtors);
+        this.tableColumns = Object.keys(debtors[0]);
+        this.clickableColumns = new Set<string>([this.tableColumns[0]]);
+        this.tableData.paginator = this.paginator;
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }

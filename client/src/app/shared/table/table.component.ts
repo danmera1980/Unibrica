@@ -4,6 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CdkColumnDef } from '@angular/cdk/table';
 import { Debt } from 'src/app/stadistics/components/debts/debts.interface';
+import { Debtor } from 'src/app/stadistics/components/debtors/debtors.interface';
 
 const MaterialModules = [
   MatTableModule,
@@ -26,7 +27,7 @@ interface TableClickEvent {
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
-  @Input() dataSource!: MatTableDataSource<Debt>;
+  @Input() dataSource!: MatTableDataSource<Debt | Debtor>;
   @Input() columns:string[] = [];
   @Input() clickableColumns!:Set<string>;
   @Output() elementClickEmitter = new EventEmitter<TableClickEvent>();

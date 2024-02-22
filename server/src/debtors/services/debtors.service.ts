@@ -14,7 +14,7 @@ export class DebtorsService {
     return await this.debtorRepository.find();
   }
 
-  async findOne(id: number): Promise<DebtorEntity> {
+  async findOne(id: string): Promise<DebtorEntity> {
     return await this.debtorRepository.findOne({ where: { id: String(id) } });
   }
 
