@@ -1,1 +1,2 @@
 <app-table *ngIf="tableData && tableColumns" [dataSource]="tableData" [columns]="tableColumns" [clickableColumns]="clickableColumns"></app-table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>

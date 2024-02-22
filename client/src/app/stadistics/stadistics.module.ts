@@ -21,15 +21,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { StadisticsService } from './stadistics.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const MaterialModules = [
-  MatTabsModule, 
-  MatIconModule, 
-  MatFormFieldModule, 
+  MatTabsModule,
+  MatIconModule,
+  MatFormFieldModule,
   MatSelectModule,
   MatNativeDateModule,
   MatDatepickerModule,
   MatButtonModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({
@@ -41,9 +43,9 @@ const MaterialModules = [
     FilterComponent,
   ],
   imports: [
+    TableComponent,
     CommonModule,
     StadisticsRoutingModule,
-    TableComponent,
     PaginationComponent,
     SearchBarComponent,
     ReactiveFormsModule,

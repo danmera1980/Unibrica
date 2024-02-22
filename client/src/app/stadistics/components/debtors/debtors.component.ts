@@ -10,21 +10,21 @@ import { Params } from '@angular/router';
   styleUrls: ['./debtors.component.scss']
 })
 export class DebtorsComponent {
-  tableData = DEBTOR_TABLE_DATA_MOCK;
-  tableColumns = Object.keys(DEBTOR_TABLE_DATA_MOCK[0]);
-  clickableColumns = new Set<string>([this.tableColumns[0]]);
-  subscriptions: Subscription[] = [];
-  params!: Params;
+  // tableData = DEBTOR_TABLE_DATA_MOCK;
+  // tableColumns = Object.keys(DEBTOR_TABLE_DATA_MOCK[0]);
+  // clickableColumns = new Set<string>([this.tableColumns[0]]);
+  // subscriptions: Subscription[] = [];
+  // params!: Params;
 
-  constructor (private stadisticsService: StadisticsService) {
-    this.subscriptions.push(
-      this.stadisticsService.getParams().subscribe(params => {
-        this.params = params;
-      })
-    )
-  }
+  // constructor (private stadisticsService: StadisticsService) {
+  //   this.subscriptions.push(
+  //     this.stadisticsService.getParams().subscribe(params => {
+  //       this.params = params;
+  //     })
+  //   )
+  // }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-  }
+  // ngOnDestroy(): void {
+  //   this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  // }
 }

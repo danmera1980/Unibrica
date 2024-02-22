@@ -1,8 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { DEBT_TABLE_DATA_MOCK, Debt } from './debts.interface';
 import { Subscription } from 'rxjs';
 import { Params } from '@angular/router';
 import { StadisticsService } from '../../stadistics.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-debts',
@@ -10,25 +12,30 @@ import { StadisticsService } from '../../stadistics.service';
   styleUrls: ['./debts.component.scss'],
 })
 export class DebtsComponent implements OnDestroy {
-  tableData = [];
-  tableColumns = Object.keys(DEBT_TABLE_DATA_MOCK[0]);
-  clickableColumns = new Set<string>([]);
+  tableData!: MatTableDataSource<Debt>;
+  tableColumns: string[] = [];
+  clickableColumns = new Set<string>();
   subscriptions: Subscription[] = [];
   debts: Debt[] = [];
   params!: Params;
+
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   constructor(private statisticsService: StadisticsService) {
     this.subscriptions.push(
       this.statisticsService.getParams().subscribe((params) => {
         this.params = params;
       })
-      );
+    );
 
-      this.subscriptions.push(
-        this.statisticsService.getAllDebts().subscribe((debts) => {
-          this.tableData = debts;
-          this.tableColumns = Object.keys(debts[0]);
-          this.clickableColumns = new Set<string>([this.tableColumns[0]]);
+    this.subscriptions.push(
+      this.statisticsService.getAllDebts().subscribe((debts) => {
+        this.debts = debts;
+        this.tableData = new MatTableDataSource<Debt>(debts);
+        console.log('table: ', this.paginator)
+        this.tableColumns = Object.keys(debts[0]);
+        this.clickableColumns = new Set<string>([this.tableColumns[0]]);
+        this.tableData.paginator = this.paginator;
       })
     );
   }

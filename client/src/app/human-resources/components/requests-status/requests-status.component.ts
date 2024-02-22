@@ -8,13 +8,13 @@ import { EMPLOYEE_TABLE_DATA_MOCK } from '../../human-resources.interface';
   styleUrls: ['./requests-status.component.scss'],
 })
 export class RequestsStatusComponent {
-  tableData = EMPLOYEE_TABLE_DATA_MOCK;
-  tableColumns = Object.keys(EMPLOYEE_TABLE_DATA_MOCK[0]);
-  clickableColumns = new Set<string>([this.tableColumns[0]]);
+  // tableData = EMPLOYEE_TABLE_DATA_MOCK;
+  // tableColumns = Object.keys(EMPLOYEE_TABLE_DATA_MOCK[0]);
+  // clickableColumns = new Set<string>([this.tableColumns[0]]);
 
-  constructor(private exporterService: ExporterService) {}
+  // constructor(private exporterService: ExporterService) {}
 
-  exportToExcel(): void {
-    this.exporterService.exportToExcel(this.tableData, 'Estado de solicitudes');
-  }
+  // exportToExcel(): void {
+  //   this.exporterService.exportToExcel(this.tableData, 'Estado de solicitudes');
+  // }
 }

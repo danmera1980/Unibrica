@@ -1,9 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { CdkColumnDef } from '@angular/cdk/table';
+import { Debt } from 'src/app/stadistics/components/debts/debts.interface';
 
 const MaterialModules = [
-  MatTableModule
+  MatTableModule,
 ]
 
 interface TableClickEvent {
@@ -18,12 +21,13 @@ interface TableClickEvent {
     CommonModule,
     ...MaterialModules
   ],
+  // providers: [CdkColumnDef],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
-  @Input({ required: true }) dataSource: Object[] = [];
-  @Input({ required: true }) columns:string[] = [];
+  @Input() dataSource!: MatTableDataSource<Debt>;
+  @Input() columns:string[] = [];
   @Input() clickableColumns!:Set<string>;
   @Output() elementClickEmitter = new EventEmitter<TableClickEvent>();
 
