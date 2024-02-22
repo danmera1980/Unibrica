@@ -8,6 +8,7 @@ import { SidebarItemComponent } from './components/sidebar-item/sidebar-item.com
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { LayoutComponent } from './layout.component';
 import { LayoutRoutingModule } from './layout.routing.module';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { LayoutRoutingModule } from './layout.routing.module';
     HeaderComponent,
     LayoutComponent,
     SidebarItemComponent,
+
   ],
-  imports: [CommonModule, LayoutRoutingModule, MatIconModule, MatToolbarModule, MatButtonModule],
+  imports: [CommonModule, LayoutRoutingModule, MatIconModule, MatToolbarModule, MatButtonModule, MatSidenavModule,],
 })
 export class LayoutModule {}

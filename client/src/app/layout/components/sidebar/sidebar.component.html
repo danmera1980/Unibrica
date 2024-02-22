@@ -1,17 +1,25 @@
-<div class="sidebar-container">
-  <div class="logo-container">
-    <img alt="unibrica logo" class="logo" src="assets/media/alternative-logo.png" />
-  </div>
+<mat-sidenav-container>
+  <mat-sidenav>
+    <div class="logo-container">
+      <img alt="unibrica logo" class="logo" src="assets/media/alternative-logo.png" />
+    </div>
 
-  <hr class="divider" />
+    <hr class="divider" />
 
-  <div class="sidebar-items-container">
-    <ul class="sidebar-items-list">
-      <li *ngFor="let sidebarItem of sidebarItems">
-        <app-sidebar-item [sidebarItem]="sidebarItem" [activatedRoute]="currentRoute"></app-sidebar-item>
-      </li>
-    </ul>
-  </div>
+    <div class="sidebar-items-container">
+      <ul class="sidebar-items-list">
+        <li *ngFor="let sidebarItem of sidebarItems">
+          <app-sidebar-item [sidebarItem]="sidebarItem" [activatedRoute]="currentRoute"></app-sidebar-item>
+        </li>
+      </ul>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- <div class="sidebar-container">
 </div>
 
 <div class="hamburger" *ngIf="!isMenuOpen" (click)="toggleMenu()">
@@ -29,4 +37,4 @@
       </li>
     </ul>
   </div>
-</div>
+</div> -->
