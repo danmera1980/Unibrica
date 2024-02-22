@@ -2,7 +2,8 @@
 
 :host {
   width: 100%;
-  height: 100%;
+  height: 83vh;
+  // overflow: scroll;
 }
 
 .filter-button{
@@ -32,13 +33,13 @@
   max-height: calc(56px*4);
 }
 
-@media ( width > b.$mobile-breakpoint) { 
+@media ( width > b.$mobile-breakpoint) {
   .shown{
     max-height: 112px;
   }
 }
 
-@media ( width > b.$laptop-breakpoint) { 
+@media ( width > b.$laptop-breakpoint) {
   :host {
     padding: 2em;
   }

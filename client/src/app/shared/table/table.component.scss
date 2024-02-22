@@ -1,10 +1,9 @@
 @use 'colors' as c;
 
-:host {
-    display: block;
-    z-index: 2;
-    overflow-x: auto;
-}
+// :host {
+//     display: block;
+//     overflow-x: auto;
+// }
 
 .clickable-cell {
     cursor: pointer;
@@ -12,4 +11,13 @@
 
 .clickable-cell:hover{
     color: c.$accent-color;
+}
+
+table {
+  width: 100%;
+}
+
+.table-container {
+  height: 62vh;
+  overflow: auto;
 }
