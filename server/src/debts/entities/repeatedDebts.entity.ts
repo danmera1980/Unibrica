@@ -1,11 +1,11 @@
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/config/base.entity';
-import { IDebt } from 'src/interfaces/debt.interface';
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { DebtSheetsEntity } from './debtSheets.entity';
 import { AccountEntity } from './accounts.entity';
+import { DebtSheetsEntity } from './debtSheets.entity';
+import { IDebt } from 'src/interfaces/debt.interface';
 
-@Entity({ name: 'debts' })
-export class DebtEntity extends BaseEntity implements IDebt {
+@Entity({ name: 'repeated-debts' })
+export class RepeatedDebtEntity extends BaseEntity implements IDebt {
   @Column()
   idDebt: string;
 

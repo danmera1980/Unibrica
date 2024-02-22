@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DebtSheetsEntity } from '../entities/debtSheets.entity';
 import * as XLSX from 'xlsx';
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ErrorManager } from 'src/utils/error.manager';
 import { DebtorEntity } from '../entities/debtors.entity';
 import { AccountEntity } from '../entities/accounts.entity';
@@ -10,6 +10,8 @@ import { UserEntity } from 'src/users/entities/users.entity';
 import { ClientEntity } from 'src/clients/entities/clients.entity';
 import { BankEntity } from '../../banks/entities/banks.entity';
 import { DebtEntity } from '../entities/debts.entity';
+import { PaginationQueryDto } from '../controllers/debts.controller';
+import { RepeatedDebtEntity } from '../entities/repeatedDebts.entity';
 
 @Injectable()
 export class DebtsService {
@@ -21,7 +23,9 @@ export class DebtsService {
     @InjectRepository(AccountEntity) private readonly accountRepository: Repository<AccountEntity>,
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(ClientEntity) private readonly clientEntity: Repository<ClientEntity>,
-    @InjectRepository(BankEntity) private readonly bankEntity: Repository<BankEntity>
+    @InjectRepository(BankEntity) private readonly bankEntity: Repository<BankEntity>,
+    @InjectRepository(RepeatedDebtEntity)
+    private readonly repeatedDebtRepository: Repository<RepeatedDebtEntity>
   ) {}
 
   public async uploadDebtSheet(
@@ -59,7 +63,6 @@ export class DebtsService {
       // Create debt sheet
       await this.debtSheetRepository.save(debtSheet);
 
-      console.log('ACÄ LLEGÖ');
       // Create a promise returning the text: "Debt sheet uploaded successfully, and it is being processed.", then process the debt sheet in the background
       new Promise((resolve) => {
         resolve('Debt sheet uploaded successfully, and it is being processed.');
@@ -74,14 +77,23 @@ export class DebtsService {
     }
   }
 
+  /*
+   * Procesado del archivo Excel
+   */
   public async processDebtSheet(excelData: any, debtSheet: DebtSheetsEntity) {
     const debtors = [];
     const accounts = [];
     const debts = [];
+    const repeatedDebts = [];
 
     for (const row of excelData) {
+      const debtId = row['Id_adherente'];
+      const existingDebt = await this.debtRepository.findOne({ where: { idDebt: debtId } });
+      if (existingDebt) {
+        repeatedDebts.push(existingDebt);
+        continue;
+      }
       // Search/Create debtor
-      console.log('Estoy procesando... ');
       let debtor: DebtorEntity;
       const checkDebtor = await this.debtorRepository.findOne({
         where: { dni: row['DNI'] },
@@ -95,7 +107,6 @@ export class DebtsService {
         debtor.lastNames = row['APELLIDOS'].toUpperCase();
         debtor.firstNames = row['NOMBRES'].toUpperCase();
 
-        // debtor = await this.debtorRepository.save(debtor);
         debtors.push(debtor);
       }
 
@@ -131,19 +142,48 @@ export class DebtsService {
       debts.push(debt);
     }
 
-    console.log('DEBTS: ', debts);
-
     await Promise.all([
       this.debtorRepository.save(debtors),
       this.accountRepository.save(accounts),
       this.debtRepository.save(debts),
+      this.repeatedDebtRepository.save(repeatedDebts),
     ]);
 
     return 'Debts have been processed successfully.';
   }
 
-  public async getAllDebts(): Promise<DebtEntity[]> {
-    return await this.debtRepository.find();
+  async getAllDebts(paginationQuery: PaginationQueryDto) {
+    const { limit, offset, sortBy, sortOrder, filterBy, filterValue, date, startDate, endDate } =
+      paginationQuery;
+    let queryBuilder = this.debtRepository.createQueryBuilder('debt');
+
+    if (filterBy && filterValue) {
+      queryBuilder = queryBuilder.where(`debt.${filterBy} = :filterValue`, { filterValue });
+    }
+
+    if (startDate && endDate) {
+      if (date && ['createdAt', 'updatedAt', 'dueDate'].includes(date)) {
+        queryBuilder = queryBuilder.andWhere(
+          `debt.${date} >= :startDate AND debt.${date} <= :endDate`,
+          { startDate, endDate }
+        );
+      } else {
+        throw new BadRequestException('Invalid date field specified for filtering');
+      }
+    }
+
+    if (sortBy && sortOrder) {
+      const order = {};
+      order[`debt.${sortBy}`] = sortOrder.toUpperCase();
+      queryBuilder = queryBuilder.orderBy(order);
+    }
+
+    if (limit) {
+      queryBuilder = queryBuilder.limit(limit).offset(offset ?? 0);
+    }
+
+    const debts = await queryBuilder.getMany();
+    return debts;
   }
 }
 

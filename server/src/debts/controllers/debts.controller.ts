@@ -6,10 +6,23 @@ import {
   UploadedFile,
   UseInterceptors,
   Get,
+  Query,
 } from '@nestjs/common';
 import { DebtsService } from '../services/debts.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
+
+export interface PaginationQueryDto {
+  limit: number;
+  offset: number;
+  sortBy: string;
+  sortOrder: string;
+  filterBy: string;
+  filterValue: string;
+  date: string;
+  startDate: Date;
+  endDate: Date;
+}
 
 @Controller('debts')
 export class DebtsController {
@@ -30,7 +43,7 @@ export class DebtsController {
   }
 
   @Get('all')
-  public async getAllDebts() {
-    return await this.debtsService.getAllDebts();
+  public async getAllDebts(@Query() paginationQuery: PaginationQueryDto) {
+    return await this.debtsService.getAllDebts(paginationQuery);
   }
 }
