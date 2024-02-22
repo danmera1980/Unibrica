@@ -13,6 +13,7 @@ import { RequestsModule } from './requests/requests.module';
 import { BreaksModule } from './breaks/breaks.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { BanksModule } from './banks/banks.module';
+import { DebtorsModule } from './debtors/debtors.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BanksModule } from './banks/banks.module';
     PermissionsModule,
     AuthModule,
     DebtsModule,
+    DebtorsModule,
     BanksModule,
     ClientsModule,
     AttemptsModule,

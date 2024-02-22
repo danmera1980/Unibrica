@@ -32,7 +32,6 @@ export class DebtsComponent implements OnDestroy {
       this.statisticsService.getAllDebts().subscribe((debts) => {
         this.debts = debts;
         this.tableData = new MatTableDataSource<Debt>(debts);
-        console.log('table: ', this.paginator)
         this.tableColumns = Object.keys(debts[0]);
         this.clickableColumns = new Set<string>([this.tableColumns[0]]);
         this.tableData.paginator = this.paginator;
