@@ -19,7 +19,10 @@ export class DebtorsService {
     let queryBuilder = this.debtorRepository.createQueryBuilder('debtor');
 
     if (filterBy && filterValue) {
-      queryBuilder = queryBuilder.where(`debtor.${filterBy} = :filterValue`, { filterValue });
+      const lowerFilterValue = filterValue.toLowerCase(); // Convertir filterValue a minúsculas
+      queryBuilder = queryBuilder.where(`LOWER(debtor.${filterBy}) LIKE :filterValue`, {
+        filterValue: `%${lowerFilterValue}%`,
+      });
     }
 
     if (startDate && endDate) {
@@ -33,28 +36,8 @@ export class DebtorsService {
       }
     }
 
-    // Copia la consulta principal para contar el número total de elementos
-    let totalItemsQueryBuilder = this.debtorRepository.createQueryBuilder('debtor');
-
-    if (filterBy && filterValue) {
-      totalItemsQueryBuilder = totalItemsQueryBuilder.where(`debtor.${filterBy} = :filterValue`, {
-        filterValue,
-      });
-    }
-
-    if (startDate && endDate) {
-      if (date && ['createdAt', 'updatedAt', 'dueDate'].includes(date)) {
-        totalItemsQueryBuilder = totalItemsQueryBuilder.andWhere(
-          `debtor.${date} >= :startDate AND debtor.${date} <= :endDate`,
-          { startDate, endDate }
-        );
-      } else {
-        throw new BadRequestException('Invalid date field specified for filtering');
-      }
-    }
-
     // Ejecuta la consulta para obtener el total de elementos
-    const totalItems = await totalItemsQueryBuilder.getCount();
+    const totalItems = await queryBuilder.getCount();
 
     if (sortBy && sortOrder) {
       const order = {};
@@ -68,7 +51,6 @@ export class DebtorsService {
 
     const debtors = await queryBuilder.getMany();
 
-    console.log('DEBTORS: ', debtors);
     // Retorna los datos de las deudas junto con el total de elementos
     return { debtors, totalItems };
     // return await this.debtorRepository.find();

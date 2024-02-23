@@ -1,8 +1,8 @@
 <app-search-bar (inputEventEmitter)="changeSearchValue($event)" (inputClearEventEmitter)="clearSearchValue()"></app-search-bar>
 <mat-form-field subscriptSizing="dynamic" >
     <mat-label>Campo a buscar</mat-label>
-    <mat-select *ngIf="currentRoute in selectOptions" (selectionChange)="changeSearchField($event)">
-        <mat-option *ngFor="let option of selectOptions[currentRoute]" value="option.value">{{option.label}}</mat-option>
+    <mat-select (selectionChange)="changeSearchField($event)">
+        <mat-option *ngFor="let option of selectOptions[currentRoute]" [value]="option.value">{{option.label}}</mat-option>
     </mat-select>
 </mat-form-field>
 <!-- <mat-form-field subscriptSizing="dynamic" class="range-picker-form"  *ngIf="currentRoute.includes('deudas')">

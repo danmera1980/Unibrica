@@ -48,9 +48,7 @@ export class TableComponent {
     clientId: 'ID Cliente'
   };
 
-  ngOnInit() {
-    console.log('COLUMNS : ', this.columns);
-  }
+  ngOnInit() {}
 
   elementClick (event: TableClickEvent):void {
     if (!this.clickableColumns) return;

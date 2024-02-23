@@ -38,7 +38,7 @@ export class StadisticsService {
   }
 
   getAllDebtors(params: StatisticsParams): Observable<{totalItems: number, debtors: Debtor[]}> {
-    const url =`${this.DebtorsUrl}?limit=${params.limit}&offset=${params.offset}`
+    const url =`${this.DebtorsUrl}?limit=${params.limit}&offset=${params.offset}&filterBy=${params.filterBy ?? 'firstNames'}&filterValue=${params.filterValue}`
     return this.http.get<any>(url, { withCredentials: true });
   }
 

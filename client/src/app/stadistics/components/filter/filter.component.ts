@@ -15,7 +15,7 @@ export class FilterComponent {
 
   selectOptions: {[key: string]: {value: string, label: string}[]} = {
     'deudas': [{value: 'idDebt', label:'ID Deuda'}],
-    'deudores': [{value: 'firstName', label:'Nombre'}, {value: 'dni', label:'DNI'}],
+    'deudores': [{value: 'firstNames', label:'Nombre'}, {value: 'dni', label:'DNI'}],
     'clientes': [{value: 'name', label:'Nombre'}, {value: 'idClient', label:'ID Cliente'}]
   }
 
@@ -28,7 +28,7 @@ export class FilterComponent {
   }
 
   changeSearchField(field: any): void {
-    this.filterService.updateSearchField(field.value.value);
+    this.filterService.updateSearchField(field.value);
   }
 
   changeRangeStart(start: Date | null): void {
