@@ -1,4 +1,4 @@
-<app-search-bar (inputEventEmitter)="changeSearchValue($event)"></app-search-bar>
+<app-search-bar (inputEventEmitter)="changeSearchValue($event)" (inputClearEventEmitter)="clearSearchValue()"></app-search-bar>
 <mat-form-field subscriptSizing="dynamic" >
     <mat-label>Campo a buscar</mat-label>
     <mat-select (selectionChange)="changeSearchField($event)">

@@ -10,7 +10,9 @@ import { Client } from './components/clients/clients.interfaces';
 
 interface StatisticsParams {
   limit: number;
-  offset: number
+  offset: number;
+  filterBy?: string;
+  filterValue?: string;
 }
 
 @Injectable()
@@ -31,7 +33,7 @@ export class StadisticsService {
   }
 
   getAllDebts(params: StatisticsParams): Observable<any> {
-    const url =`${this.DebtsUrl}/all?limit=${params.limit}&offset=${params.offset}`
+    const url =`${this.DebtsUrl}/all?limit=${params.limit}&offset=${params.offset}&filterBy=${params.filterBy ?? 'idDebt'}&filterValue=${params.filterValue}`
     return this.http.get<any>(url, { withCredentials: true });
   }
 

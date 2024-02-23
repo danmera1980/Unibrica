@@ -22,6 +22,7 @@ export class SearchBarComponent implements OnDestroy {
   @Input() label = 'Busque un item';
   inputSubject$ = new BehaviorSubject<string>('');
   @Output() inputEventEmitter = new EventEmitter<string>();
+  @Output() inputClearEventEmitter = new EventEmitter<string>();
   inputSubscription!: Subscription;
 
   constructor() {
@@ -38,5 +39,10 @@ export class SearchBarComponent implements OnDestroy {
 
   inputChange(inputValue: string): void {
     this.inputSubject$.next(inputValue);
+  }
+
+  handleReset(input: any) {
+    input.value = '';
+    this.inputClearEventEmitter.emit('')
   }
 }

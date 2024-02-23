@@ -174,28 +174,30 @@ export class DebtsService {
       }
     }
 
+    const totalItems = await queryBuilder.getCount();
+
     // Copia la consulta principal para contar el número total de elementos
-    let totalItemsQueryBuilder = this.debtRepository.createQueryBuilder('debt');
-    if (filterBy && filterValue) {
-      // Utiliza LIKE para buscar resultados parciales
-      queryBuilder = queryBuilder.where(`debt.${filterBy} LIKE :filterValue`, {
-        filterValue: `%${filterValue}%`,
-      });
-    }
+    // let totalItemsQueryBuilder = this.debtRepository.createQueryBuilder('debt');
+    // if (filterBy && filterValue) {
+    //   // Utiliza LIKE para buscar resultados parciales
+    //   queryBuilder = queryBuilder.where(`debt.${filterBy} LIKE :filterValue`, {
+    //     filterValue: `%${filterValue}%`,
+    //   });
+    // }
 
-    if (startDate && endDate) {
-      if (date && ['createdAt', 'updatedAt', 'dueDate'].includes(date)) {
-        totalItemsQueryBuilder = totalItemsQueryBuilder.andWhere(
-          `debt.${date} >= :startDate AND debt.${date} <= :endDate`,
-          { startDate, endDate }
-        );
-      } else {
-        throw new BadRequestException('Invalid date field specified for filtering');
-      }
-    }
+    // if (startDate && endDate) {
+    //   if (date && ['createdAt', 'updatedAt', 'dueDate'].includes(date)) {
+    //     totalItemsQueryBuilder = totalItemsQueryBuilder.andWhere(
+    //       `debt.${date} >= :startDate AND debt.${date} <= :endDate`,
+    //       { startDate, endDate }
+    //     );
+    //   } else {
+    //     throw new BadRequestException('Invalid date field specified for filtering');
+    //   }
+    // }
 
-    // Ejecuta la consulta para obtener el total de elementos
-    const totalItems = await totalItemsQueryBuilder.getCount();
+    // // Ejecuta la consulta para obtener el total de elementos
+    // const totalItems = await totalItemsQueryBuilder.getCount();
 
     if (sortBy && sortOrder) {
       const order = {};

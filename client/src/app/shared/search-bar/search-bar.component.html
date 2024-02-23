@@ -2,7 +2,7 @@
     <mat-label>{{ label }}</mat-label>
     <input matInput type="text" #input (keyup)="inputChange(input.value)">
     <mat-icon matPrefix>search</mat-icon>
-    <button *ngIf="input.value" matSuffix mat-icon-button aria-label="Clear" (click)="input.value=''">
+    <button *ngIf="input.value" matSuffix mat-icon-button aria-label="Clear" (click)="handleReset(input)">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>

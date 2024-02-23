@@ -33,6 +33,10 @@ export class FilterComponent {
     this.filterService.updateRangeEnd(end);
   }
 
+  clearSearchValue(): void {
+    this.filterService.updateSearchValue('')
+  }
+
   searchButtonClick(): void {
     // You can perform additional logic here if needed
   }
