@@ -158,7 +158,9 @@ export class DebtsService {
     let queryBuilder = this.debtRepository.createQueryBuilder('debt');
 
     if (filterBy && filterValue) {
-      queryBuilder = queryBuilder.where(`debt.${filterBy} = :filterValue`, { filterValue });
+      queryBuilder = queryBuilder.where(`debt.${filterBy} LIKE :filterValue`, {
+        filterValue: `%${filterValue}%`,
+      });
     }
 
     if (startDate && endDate) {
@@ -174,10 +176,10 @@ export class DebtsService {
 
     // Copia la consulta principal para contar el número total de elementos
     let totalItemsQueryBuilder = this.debtRepository.createQueryBuilder('debt');
-
     if (filterBy && filterValue) {
-      totalItemsQueryBuilder = totalItemsQueryBuilder.where(`debt.${filterBy} = :filterValue`, {
-        filterValue,
+      // Utiliza LIKE para buscar resultados parciales
+      queryBuilder = queryBuilder.where(`debt.${filterBy} LIKE :filterValue`, {
+        filterValue: `%${filterValue}%`,
       });
     }
 

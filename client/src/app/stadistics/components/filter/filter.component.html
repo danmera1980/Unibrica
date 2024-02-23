@@ -1,11 +1,11 @@
 <app-search-bar (inputEventEmitter)="changeSearchValue($event)"></app-search-bar>
 <mat-form-field subscriptSizing="dynamic" >
     <mat-label>Campo a buscar</mat-label>
-    <mat-select [(value)]="searchField">
+    <mat-select (selectionChange)="changeSearchField($event)">
         <mat-option value="option">Option</mat-option>
     </mat-select>
 </mat-form-field>
-<mat-form-field subscriptSizing="dynamic" class="range-picker-form"  *ngIf="currentRoute.includes('deudas')">
+<!-- <mat-form-field subscriptSizing="dynamic" class="range-picker-form"  *ngIf="currentRoute.includes('deudas')">
     <mat-label>Rango de búsqueda</mat-label>
     <mat-date-range-input [rangePicker]="dateRangePicker" [formGroup]="range">
         <input matStartDate placeholder="Start date" formControlName="start" />
@@ -13,5 +13,5 @@
     </mat-date-range-input>
     <mat-datepicker-toggle matIconSuffix [for]="dateRangePicker"></mat-datepicker-toggle>
     <mat-date-range-picker #dateRangePicker  disabled="false"></mat-date-range-picker>
-</mat-form-field>
+</mat-form-field> -->
 <button mat-raised-button color="accent" (click)="searchButtonClick()">Search</button>

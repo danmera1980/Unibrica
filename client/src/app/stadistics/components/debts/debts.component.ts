@@ -1,12 +1,13 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { DEBT_TABLE_DATA_MOCK, Debt } from './debts.interface';
-import { BehaviorSubject, Subscription, take } from 'rxjs';
+import { BehaviorSubject, Subscription, take, debounceTime } from 'rxjs';
 import { Params } from '@angular/router';
 import { StadisticsService } from '../../stadistics.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Debtor } from '../debtors/debtors.interface';
 import { MatTableDataSourceInput } from 'src/app/shared/table/table.component';
+import { FilterService } from 'src/app/core/services/filter.service';
 
 @Component({
   selector: 'app-debts',
@@ -28,10 +29,14 @@ export class DebtsComponent implements OnDestroy {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  constructor(private statisticsService: StadisticsService) {}
+  constructor(private statisticsService: StadisticsService, private filterService: FilterService) {}
 
   ngOnInit(): void {
-    this.$params.subscribe(() => this.fetchDebts())
+    this.subscriptions.push(this.$params.subscribe(() => this.fetchDebts()))
+    this.subscriptions.push(this.filterService.searchValue$.pipe(debounceTime(500)).subscribe( searchValue => {
+      const newParams = { ...this.params.getValue(), search: searchValue };
+      this.params.next(newParams);
+    }))
 
     if (this.paginator && this.debts.length === 0) {
       this.fetchDebts();

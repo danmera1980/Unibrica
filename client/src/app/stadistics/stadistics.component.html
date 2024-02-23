@@ -14,7 +14,7 @@
   </nav>
   <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
   <div class="filters" [class.shown]="filtersShown">
-      <app-filter [currentRoute]="currentRoute" (filterEventEmitter)="handleFilterEvent($event)"></app-filter>
+      <app-filter></app-filter>
   </div>
   <div class="mat-elevation-z8 table-container">
     <router-outlet></router-outlet>
