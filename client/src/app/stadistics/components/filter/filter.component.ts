@@ -7,22 +7,28 @@ import { FilterService } from 'src/app/core/services/filter.service';
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent {
+  @Input() currentRoute!: string;
   range = new FormGroup ({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   })
 
+  selectOptions: {[key: string]: {value: string, label: string}[]} = {
+    'deudas': [{value: 'idDebt', label:'ID Deuda'}],
+    'deudores': [{value: 'firstName', label:'Nombre'}, {value: 'dni', label:'DNI'}],
+    'clientes': [{value: 'name', label:'Nombre'}, {value: 'idClient', label:'ID Cliente'}]
+  }
+
   constructor(private filterService: FilterService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   changeSearchValue(search: string): void {
     this.filterService.updateSearchValue(search);
   }
 
   changeSearchField(field: any): void {
-    this.filterService.updateSearchField(field);
+    this.filterService.updateSearchField(field.value.value);
   }
 
   changeRangeStart(start: Date | null): void {
