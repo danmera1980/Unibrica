@@ -172,6 +172,29 @@ export class DebtsService {
       }
     }
 
+    // Copia la consulta principal para contar el número total de elementos
+    let totalItemsQueryBuilder = this.debtRepository.createQueryBuilder('debt');
+
+    if (filterBy && filterValue) {
+      totalItemsQueryBuilder = totalItemsQueryBuilder.where(`debt.${filterBy} = :filterValue`, {
+        filterValue,
+      });
+    }
+
+    if (startDate && endDate) {
+      if (date && ['createdAt', 'updatedAt', 'dueDate'].includes(date)) {
+        totalItemsQueryBuilder = totalItemsQueryBuilder.andWhere(
+          `debt.${date} >= :startDate AND debt.${date} <= :endDate`,
+          { startDate, endDate }
+        );
+      } else {
+        throw new BadRequestException('Invalid date field specified for filtering');
+      }
+    }
+
+    // Ejecuta la consulta para obtener el total de elementos
+    const totalItems = await totalItemsQueryBuilder.getCount();
+
     if (sortBy && sortOrder) {
       const order = {};
       order[`debt.${sortBy}`] = sortOrder.toUpperCase();
@@ -183,7 +206,9 @@ export class DebtsService {
     }
 
     const debts = await queryBuilder.getMany();
-    return debts;
+
+    // Retorna los datos de las deudas junto con el total de elementos
+    return { debts, totalItems };
   }
 }
 

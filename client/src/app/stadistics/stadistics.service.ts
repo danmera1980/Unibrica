@@ -8,6 +8,11 @@ import { environment } from 'src/enviroments/enviroment';
 import { Debtor } from './components/debtors/debtors.interface';
 import { Client } from './components/clients/clients.interfaces';
 
+interface StatisticsParams {
+  limit: number;
+  offset: number
+}
+
 @Injectable()
 export class StadisticsService {
 
@@ -25,8 +30,10 @@ export class StadisticsService {
     return this.params$
   }
 
-  getAllDebts(): Observable<any> {
-    return this.http.get<any>(`${this.DebtsUrl}/all`, { withCredentials: true });
+  getAllDebts(params: StatisticsParams): Observable<any> {
+    const url =`${this.DebtsUrl}/all?limit=${params.limit}&offset=${params.offset}`
+    console.log('URL: ', url)
+    return this.http.get<any>(url, { withCredentials: true });
   }
 
   getAllDebtors(): Observable<Debtor[]> {

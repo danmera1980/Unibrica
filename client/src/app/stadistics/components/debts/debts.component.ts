@@ -1,9 +1,9 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { DEBT_TABLE_DATA_MOCK, Debt } from './debts.interface';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, take } from 'rxjs';
 import { Params } from '@angular/router';
 import { StadisticsService } from '../../stadistics.service';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Debtor } from '../debtors/debtors.interface';
 import { MatTableDataSourceInput } from 'src/app/shared/table/table.component';
@@ -19,29 +19,45 @@ export class DebtsComponent implements OnDestroy {
   clickableColumns = new Set<string>();
   subscriptions: Subscription[] = [];
   debts: Debt[] = [];
-  params!: Params;
+  params = new BehaviorSubject<{ limit: number; offset: number }>({
+    limit: 10,
+    offset: 0,
+  });
+  $params = this.params.asObservable()
+  totalItems = 0;
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
-  constructor(private statisticsService: StadisticsService) {
-    this.subscriptions.push(
-      this.statisticsService.getParams().subscribe((params) => {
-        this.params = params;
-      })
-    );
+  constructor(private statisticsService: StadisticsService) {}
 
-    this.subscriptions.push(
-      this.statisticsService.getAllDebts().subscribe((debts) => {
-        this.debts = debts;
-        this.tableData = new MatTableDataSource<MatTableDataSourceInput>(debts);
-        // this.tableColumns = Object.keys(debts[0]);
-        this.clickableColumns = new Set<string>([this.tableColumns[0]]);
-        this.tableData.paginator = this.paginator;
-      })
-    );
+  ngOnInit(): void {
+    this.$params.subscribe(() => this.fetchDebts())
+
+    if (this.paginator && this.debts.length === 0) {
+      this.fetchDebts();
+    }
+  }
+
+  handleClick(page: PageEvent) {
+    this.params.next({
+      limit: page.pageSize,
+      offset: page.pageIndex * page.pageSize,
+    });
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  fetchDebts(): void {
+    this.statisticsService
+      .getAllDebts(this.params.getValue())
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.debts = data.debts;
+        this.totalItems = data.totalItems;
+        this.tableData = new MatTableDataSource<MatTableDataSourceInput>(this.debts);
+        this.clickableColumns = new Set<string>([this.tableColumns[0]]);
+      });
   }
 }
