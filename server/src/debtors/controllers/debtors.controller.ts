@@ -1,14 +1,15 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query } from '@nestjs/common';
 import { DebtorsService } from '../services/debtors.service';
 import { DebtorEntity } from 'src/debts/entities/debtors.entity';
+import { PaginationQueryDto } from 'src/debts/controllers/debts.controller';
 
 @Controller('debtors')
 export class DebtorsController {
   constructor(private readonly debtorsService: DebtorsService) {}
 
   @Get()
-  async findAll(): Promise<DebtorEntity[]> {
-    return this.debtorsService.findAll();
+  async findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.debtorsService.findAll(paginationQuery);
   }
 
   @Get(':id')

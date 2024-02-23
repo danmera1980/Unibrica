@@ -32,12 +32,12 @@ export class StadisticsService {
 
   getAllDebts(params: StatisticsParams): Observable<any> {
     const url =`${this.DebtsUrl}/all?limit=${params.limit}&offset=${params.offset}`
-    console.log('URL: ', url)
     return this.http.get<any>(url, { withCredentials: true });
   }
 
-  getAllDebtors(): Observable<Debtor[]> {
-    return this.http.get<any>(`${this.DebtorsUrl}`, { withCredentials: true });
+  getAllDebtors(params: StatisticsParams): Observable<{totalItems: number, debtors: Debtor[]}> {
+    const url =`${this.DebtorsUrl}?limit=${params.limit}&offset=${params.offset}`
+    return this.http.get<any>(url, { withCredentials: true });
   }
 
   getAllClients(): Observable<Client[]> {
