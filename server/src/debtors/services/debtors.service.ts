@@ -18,8 +18,8 @@ export class DebtorsService {
       paginationQuery;
     let queryBuilder = this.debtorRepository.createQueryBuilder('debtor');
 
-    if (filterBy && filterValue) {
-      const lowerFilterValue = filterValue.toLowerCase(); // Convertir filterValue a minúsculas
+    if (filterBy && ['firstNames', 'dni'].includes(filterBy)) {
+      const lowerFilterValue = filterValue.toLowerCase();
       queryBuilder = queryBuilder.where(`LOWER(debtor.${filterBy}) LIKE :filterValue`, {
         filterValue: `%${lowerFilterValue}%`,
       });
@@ -53,7 +53,6 @@ export class DebtorsService {
 
     // Retorna los datos de las deudas junto con el total de elementos
     return { debtors, totalItems };
-    // return await this.debtorRepository.find();
   }
 
   async findOne(id: string): Promise<DebtorEntity> {

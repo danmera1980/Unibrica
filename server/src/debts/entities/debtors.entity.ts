@@ -17,4 +17,7 @@ export class DebtorEntity extends BaseEntity implements IDebtor {
 
   @OneToMany(() => AccountEntity, (account) => account.debtor)
   accounts: AccountEntity[];
+
+  @OneToMany(() => DebtEntity, (account) => account.debtor)
+  debts: DebtEntity[];
 }

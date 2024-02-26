@@ -3,7 +3,6 @@ import { DebtSheetsEntity } from '../entities/debtSheets.entity';
 import * as XLSX from 'xlsx';
 import { Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ErrorManager } from 'src/utils/error.manager';
 import { DebtorEntity } from '../entities/debtors.entity';
 import { AccountEntity } from '../entities/accounts.entity';
 import { UserEntity } from 'src/users/entities/users.entity';
@@ -33,123 +32,105 @@ export class DebtsService {
     userId: string,
     clientId: string,
     bankId: string
-  ): Promise<any> {
+  ): Promise<string> {
     try {
-      // Create new debt sheet
-      const debtSheet = new DebtSheetsEntity();
-      debtSheet.date = new Date();
-      debtSheet.fileName = file.originalname;
-      debtSheet.filePath = file.path;
-
-      const user = await this.userRepository.findOne({
-        where: { id: userId },
-      });
-      debtSheet.user = user;
-
-      const client = await this.clientEntity.findOne({
-        where: { id: clientId },
-      });
-      debtSheet.client = client;
-
-      const bank = await this.bankEntity.findOne({
-        where: { id: bankId },
-      });
-      debtSheet.bank = bank;
-
       const workbook = XLSX.readFile(file.path);
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const excelData = XLSX.utils.sheet_to_json(sheet);
 
-      // Create debt sheet
-      await this.debtSheetRepository.save(debtSheet);
-
-      // Create a promise returning the text: "Debt sheet uploaded successfully, and it is being processed.", then process the debt sheet in the background
-      new Promise((resolve) => {
-        resolve('Debt sheet uploaded successfully, and it is being processed.');
-      }).then(() => {
-        /* Aca habria que hacer el update al archivo */
-        this.processDebtSheet(excelData, debtSheet);
-      });
+      const blockSize = 200; // Tamaño del bloque
+      for (let startRow = 1; startRow < excelData.length; startRow += blockSize) {
+        const endRow = Math.min(startRow + blockSize, excelData.length);
+        const blockData = excelData.slice(startRow, endRow);
+        await this.processDebtSheet(blockData);
+      }
 
       return 'Debt sheet uploaded successfully, and it is being processed.';
     } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
+      throw new Error('Error uploading debt sheet: ' + error.message);
     }
   }
 
   /*
-   * Procesado del archivo Excel
+   * Function to process de file
    */
-  public async processDebtSheet(excelData: any, debtSheet: DebtSheetsEntity) {
-    const debtors = [];
-    const accounts = [];
-    const debts = [];
-    const repeatedDebts = [];
+  public async processDebtSheet(excelData: any) {
+    const debtors: DebtorEntity[] = [];
+    const accounts: AccountEntity[] = [];
+    const debts: DebtEntity[] = [];
+    const repeatedDebts: RepeatedDebtEntity[] = [];
 
     for (const row of excelData) {
-      const debtId = row['Id_adherente'];
-      const existingDebt = await this.debtRepository.findOne({ where: { idDebt: debtId } });
+      // Check if debt exists
+      const existingDebt = await this.debtRepository.findOne({
+        where: { idDebt: row['Id_adherente'] },
+      });
+
       if (existingDebt) {
-        repeatedDebts.push(existingDebt);
+        // If debt exist, it stores it
+        const repeatedDebt = new RepeatedDebtEntity();
+        repeatedDebt.idDebt = existingDebt.idDebt;
+        repeatedDebt.dueDate = existingDebt.dueDate;
+        repeatedDebt.amount = existingDebt.amount;
+        repeatedDebt.account = existingDebt.account;
+        repeatedDebt.debtSheet = existingDebt.debtSheet;
+        repeatedDebts.push(repeatedDebt);
         continue;
-      }
-      // Search/Create debtor
-      let debtor: DebtorEntity;
-      const checkDebtor = await this.debtorRepository.findOne({
-        where: { dni: row['DNI'] },
-      });
-
-      if (checkDebtor) {
-        debtor = checkDebtor;
       } else {
-        debtor = new DebtorEntity();
-        debtor.dni = row['DNI'];
-        debtor.lastNames = row['APELLIDOS'].toUpperCase();
-        debtor.firstNames = row['NOMBRES'].toUpperCase();
+        // Check if debtor exits
+        let debtor = await this.debtorRepository.findOne({
+          where: { dni: row['DNI'] },
+          relations: ['debts'],
+        });
 
-        debtors.push(debtor);
+        // If debtor doesn't exist, creates it
+        if (!debtor) {
+          debtor = new DebtorEntity();
+          debtor.dni = row['DNI'];
+          debtor.firstNames = row['NOMBRES'].toUpperCase();
+          debtor.lastNames = row['APELLIDOS'].toUpperCase();
+          debtor.debts = []; // Inicializar la lista de deudas
+          debtors.push(debtor);
+        }
+
+        // Check if account exists
+        let account = await this.accountRepository.findOne({
+          where: { acctNumber: row['Cuenta'] },
+        });
+
+        // If account doesn't exists, it creates it
+        if (!account) {
+          account = new AccountEntity();
+          account.acctNumber = row['Cuenta'];
+          account.branch = row['Sucursal'];
+          account.exchangeType = row['Moneda'];
+          account.type = row['Tipo_cuenta'];
+          account.debtor = debtor;
+          accounts.push(account);
+        }
+
+        // Create a new debt
+        const debt = new DebtEntity();
+        debt.amount = parseFloat(row['Importe']) / 100;
+        debt.idDebt = row['Id_adherente'];
+        debt.dueDate = new Date(row['Fecha_vto']);
+        debt.account = account;
+        debt.debtor = debtor;
+        debt.isPaid = false;
+        debts.push(debt);
+
+        // Add debt to debtor
+        debtor.debts.push(debt);
       }
-
-      // Search/Create account
-      let account: AccountEntity;
-      const checkAccount = await this.accountRepository.findOne({
-        where: { acctNumber: row['Cuenta'] },
-      });
-
-      if (checkAccount) {
-        account = checkAccount;
-      } else {
-        account = new AccountEntity();
-        account.acctNumber = row['Cuenta'];
-        account.branch = row['Sucursal'];
-        account.exchangeType = row['Moneda'];
-        account.type = row['Tipo_cuenta'];
-        account.debtor = debtor;
-
-        // account = await this.accountRepository.save(account);
-        accounts.push(account);
-      }
-
-      // Search/Create debt
-      const debt = new DebtEntity();
-      debt.amount = parseInt(row['Importe']) / 100;
-      debt.idDebt = row['Id_adherente'];
-      debt.dueDate = row['Fecha_vto'];
-      debt.account = account;
-      debt.debtSheet = debtSheet;
-
-      // await this.debtRepository.save(debt);
-      debts.push(debt);
     }
 
+    // Save all entities in DB
     await Promise.all([
       this.debtorRepository.save(debtors),
       this.accountRepository.save(accounts),
       this.debtRepository.save(debts),
       this.repeatedDebtRepository.save(repeatedDebts),
     ]);
-
-    return 'Debts have been processed successfully.';
   }
 
   async getAllDebts(paginationQuery: PaginationQueryDto) {
@@ -157,9 +138,10 @@ export class DebtsService {
       paginationQuery;
     let queryBuilder = this.debtRepository.createQueryBuilder('debt');
 
-    if (filterBy && filterValue) {
-      queryBuilder = queryBuilder.where(`debt.${filterBy} LIKE :filterValue`, {
-        filterValue: `%${filterValue}%`,
+    if (filterBy && ['idDebt'].includes(filterBy)) {
+      const lowerFilterValue = filterValue.toLowerCase();
+      queryBuilder = queryBuilder.where(`LOWER(debt.${filterBy}) LIKE :filterValue`, {
+        filterValue: `%${lowerFilterValue}%`,
       });
     }
 
@@ -176,29 +158,6 @@ export class DebtsService {
 
     const totalItems = await queryBuilder.getCount();
 
-    // Copia la consulta principal para contar el número total de elementos
-    // let totalItemsQueryBuilder = this.debtRepository.createQueryBuilder('debt');
-    // if (filterBy && filterValue) {
-    //   // Utiliza LIKE para buscar resultados parciales
-    //   queryBuilder = queryBuilder.where(`debt.${filterBy} LIKE :filterValue`, {
-    //     filterValue: `%${filterValue}%`,
-    //   });
-    // }
-
-    // if (startDate && endDate) {
-    //   if (date && ['createdAt', 'updatedAt', 'dueDate'].includes(date)) {
-    //     totalItemsQueryBuilder = totalItemsQueryBuilder.andWhere(
-    //       `debt.${date} >= :startDate AND debt.${date} <= :endDate`,
-    //       { startDate, endDate }
-    //     );
-    //   } else {
-    //     throw new BadRequestException('Invalid date field specified for filtering');
-    //   }
-    // }
-
-    // // Ejecuta la consulta para obtener el total de elementos
-    // const totalItems = await totalItemsQueryBuilder.getCount();
-
     if (sortBy && sortOrder) {
       const order = {};
       order[`debt.${sortBy}`] = sortOrder.toUpperCase();
@@ -211,7 +170,7 @@ export class DebtsService {
 
     const debts = await queryBuilder.getMany();
 
-    // Retorna los datos de las deudas junto con el total de elementos
+    // It return debts and total amount of item
     return { debts, totalItems };
   }
 }
@@ -223,7 +182,7 @@ export class DebtsService {
 //     Tipo_cuenta: 4,
 //     Cuenta: 420209464635995,
 //     Id_adherente: '2850202340094646359958',
-//     Id_debito: 'SJVELAZQUEZMARIACRISTINA',
+//     Id_debito: 'LETRAS_EN_MAYÚSCULA',
 //     Fecha_vto: 20230914,
 //     Moneda: 80,
 //     Importe: 4500000,

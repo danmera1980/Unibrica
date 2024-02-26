@@ -3,6 +3,7 @@ import { IDebt } from 'src/interfaces/debt.interface';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { DebtSheetsEntity } from './debtSheets.entity';
 import { AccountEntity } from './accounts.entity';
+import { DebtorEntity } from '../entities/debtors.entity';
 
 @Entity({ name: 'debts' })
 export class DebtEntity extends BaseEntity implements IDebt {
@@ -20,4 +21,10 @@ export class DebtEntity extends BaseEntity implements IDebt {
 
   @ManyToOne(() => AccountEntity, (account) => account.debts)
   account: AccountEntity;
+
+  @ManyToOne(() => DebtorEntity, (debtor) => debtor.debts)
+  debtor: DebtorEntity;
+
+  @Column()
+  isPaid: boolean;
 }

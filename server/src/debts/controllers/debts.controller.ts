@@ -35,7 +35,7 @@ export class DebtsController {
     @Body('userId') userId: string,
     @Body('clientId') clientId: string,
     @Body('bankId') bankId: string
-  ): Promise<void> {
+  ): Promise<string> {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
