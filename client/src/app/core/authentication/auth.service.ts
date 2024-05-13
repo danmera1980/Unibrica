@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { login } from './auth-store/auth.actions';
+import { clearAuth, login } from './auth-store/auth.actions';
 import { AuthState } from './auth.interfaces';
 import { LoginData, LoginResponse } from '../http/http.interfaces';
 import { HttpBaseService } from '../http/http.service';
@@ -19,9 +19,13 @@ export class AuthService extends HttpBaseService{
     this.store.dispatch(login(userData));
   }
 
-  
+
   postLogin (userData: LoginData): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.BASIC_URL}/auth/login`, userData, this.httpOptions)
+  }
+
+  logout(): void {
+    this.store.dispatch(clearAuth())
   }
 
 }

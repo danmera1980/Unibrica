@@ -13,7 +13,7 @@ import { AuthEffects } from './core/authentication/auth-store/auth.effects';
 import { AuthReducer } from './core/authentication/auth-store/auth.reducers';
 import { metaReducers } from './root-store/index';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { ErrorHandlerService } from './core/services/error-handler.service';
 
@@ -24,6 +24,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { BanksService } from './core/services/banks.service';
 import { ClientsService } from './core/services/clients.service';
 import { UploadFileService } from './core/services/upload-file.service';
+import { AuthInterceptor } from './core/authentication/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -55,6 +56,7 @@ import { UploadFileService } from './core/services/upload-file.service';
   ],
   providers: [
     { provide: ErrorHandler, useClass: ErrorHandlerService },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: MatDialogRef,
       useValue: {},
